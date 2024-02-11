@@ -1,32 +1,34 @@
 <template>
   <div class="text-center">
-    <h1>{{ title }}</h1>
+    <h1 contenteditable="true">{{ title }}</h1>
     <h3 class="text-right">
       <span class="pr-4">填表人:</span>
       <span
         style="min-width: 2em"
         class="d-inline-block text-decoration-underline text-center"
         contenteditable="true"
-      >我</span>
+      >
+      我
+      </span>
     </h3>
-    <div class="d-flex flex-wrap justify-lg-space-evenly">
+    <div class="items">
       <div
         v-for="item in items"
         class="item"
       >
         <draggable
-          class="avatars d-flex"
+          class="avatars"
           :list="modelValue[item]"
           group="member"
           item-key="name"
           @start="dragging = true"
           @end="dragging = false"
         >
-          <template #item="{ element }">
+          <template #item="{ element }: { element: MemberData }">
             <div class="avatar">
               <img
-                :src="parseUrl?.(element)"
-               :alt="element"
+                :src="element.avatar"
+                :alt="element.name"
               >
             </div>
           </template>
@@ -42,7 +44,8 @@
 
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
+import {defineComponent, defineModel, PropType, ref, toRefs, watch} from "vue";
+import { MemberData } from '@/types/member';
 
 defineComponent(draggable)
 
@@ -53,17 +56,19 @@ const props = defineProps({
     required: true,
   },
   parseUrl: {
-    type: Function as PropType<(string) => string>,
-    default: s => s,
+    type: Function as PropType<(s: string) => string>,
+    default: (s: string) => s,
   },
 })
 
 const dragging = ref(false)
 const {title, items} = toRefs(props)
 
-const modelValue = defineModel<{}>()
+const modelValue = defineModel<{[key: string]: []}>({
+  default: {}
+})
 
-const emits = defineEmits<{(e: 'dragging', value?: boolean): void}>()
+const emits = defineEmits<{(e: 'dragging', value: boolean): void}>()
 
 watch(dragging, n => {
   console.log(n)
@@ -78,9 +83,19 @@ modelValue.value = (items?.value ?? []).reduce((obj, v) => {
 </script>
 
 <style scoped>
+  .items {
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    /*justify-content: space-evenly;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+  }
+
   .item {
     border: 3px solid;
-    flex: 1 1 15%;
+    flex: 1 1 max(15%, 8em);
     margin: 1em;
   }
 
@@ -93,6 +108,7 @@ modelValue.value = (items?.value ?? []).reduce((obj, v) => {
   .item>.avatars {
     aspect-ratio : 1 / 1;
     width: 100%;
+    display: flex;
   }
 
   .item>.avatars>.avatar>img {

@@ -2,7 +2,7 @@
   <div>
     <v-autocomplete
       label="Group"
-      :items="groups as any"
+      :items="groups"
       v-model="modelValue"
       item-value="id"
       item-title="name"
@@ -16,7 +16,7 @@
         >
           <template v-slot:prepend>
             <v-avatar
-              :image="`https://p.qlogo.cn/gh/${item.raw.id}/${item.raw.id}/640/`"
+              :image="item.raw.avatar"
             ></v-avatar>
           </template>
         </v-list-item>
@@ -26,22 +26,16 @@
 </template>
 
 <script setup lang="ts">
-import {defineModel, onMounted, PropType, toRefs, watch} from 'vue';
+import { GroupData } from '@/types/group';
+import {defineModel, PropType, toRefs} from 'vue';
 
 const props = defineProps({
   groups: {
-    type: Array as PropType<{ id: string, name: string }[]>,
+    type: Array as PropType<GroupData[]>,
     required: true
-  }
+  },
 })
 const {groups} = toRefs(props)
 
 const modelValue = defineModel<string>()
-
-onMounted(() => {
-  if (!modelValue.value) {
-    modelValue.value = groups?.value?.[0]?.id
-    console.log(groups?.value, modelValue.value)
-  }
-})
 </script>

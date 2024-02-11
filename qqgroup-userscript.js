@@ -16,6 +16,7 @@
   'use strict';
 
   const IFRAME_SRC = 'https://nominate.d2n.moe'
+  // const IFRAME_SRC = 'http://localhost:3000/ '
 
   let skey = initSkey()
 
@@ -58,13 +59,16 @@
   const iframe = document.createElement('iframe')
 
   window.addEventListener('message', async e => {
-    const {type, id} = e.data
+    const {type, ...data} = e.data
     switch (type) {
       case 'groups':
         iframe.contentWindow.postMessage({type, data: groups}, '*')
         break
       case 'members':
-        iframe.contentWindow.postMessage({type, data: await fetchGroup(id)}, '*')
+        iframe.contentWindow.postMessage({type, data: {
+          members: await fetchGroup(data.groupId),
+          groupId: data.groupId,
+        }}, '*')
         break
     }
   })

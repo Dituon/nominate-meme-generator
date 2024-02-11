@@ -4,7 +4,11 @@
       <v-navigation-drawer
         permanent
       >
-        <GroupSelector v-model="group" :groups="groups"></GroupSelector>
+        <GroupSelector
+          v-model="group"
+          :groups="groups"
+          :parse-url="parseGroupAvatar"
+        ></GroupSelector>
 
         <v-divider></v-divider>
 
@@ -26,7 +30,10 @@
         </v-container>
       </v-main>
       <div class="nav-btns">
-        <DeleteBtn :data-map="dataMap" :dragging="dragging"></DeleteBtn>
+        <DeleteBtn
+          :data-map="dataMap"
+          :dragging="dragging"
+        ></DeleteBtn>
       </div>
     </v-layout>
   </v-app>
@@ -38,6 +45,9 @@ import GroupSelector from './components/GroupSelector.vue';
 import NominateTemplate from "@/components/NominateTemplate.vue";
 import MemberAvatarList from "@/components/MemberAvatarList.vue";
 import DeleteBtn from "@/components/DeleteBtn.vue";
+import { QQGroupDataLoader } from './loader/qq-group-data-loader';
+import { MemberData } from './types/member';
+import { GroupData } from './types/group';
 
 const items = reactive([
   "最富裕的群友",
@@ -49,46 +59,31 @@ const items = reactive([
   "游戏领域大神群友",
   "傻到可爱的群友",
   "最佳姐姐/哥哥系",
-  "最佳妹妹/弟弟系"
+  "最佳妹妹/弟弟系",
 ])
 
-function parseMemberAvatar(id) {
+function parseMemberAvatar(id: string) {
   return `http://q1.qlogo.cn/g?b=qq&nk=${id}&s=640`
 }
 
-const groups = ref<{ name: string, id: string }[]>([])
+function parseGroupAvatar(id: string) {
+  return `http://p.qlogo.cn/gh/${id}/${id}/640/`
+}
+
+const qqGroupDataLoader = new QQGroupDataLoader()
+
+const groups = ref<GroupData[]>([])
 const group = ref<string>('')
-const members = ref<string[]>([])
+const members = ref<MemberData[]>([])
 const dataMap = reactive({})
 const dragging = ref(false)
 
-watch(group, n => {
-  console.log(n)
-  window.parent.postMessage({
-    type: 'members',
-    id: n,
-  }, '*')
+watch(group, async n => {
+  members.value = await qqGroupDataLoader.getMemberData(n)
 })
-
-onMounted(() => {
-  if (window.parent !== window) { // inject mode
-    window.parent.postMessage({
-      type: 'groups'
-    }, '*')
-    window.addEventListener('message', e => {
-      const {type, data} = e.data
-      switch (type) {
-        case 'groups':
-          groups.value = data
-          console.log(data)
-          break
-        case 'members':
-          members.value = data
-          console.log(members.value)
-          break
-      }
-    })
-  }
+onMounted(async () => {
+  groups.value = await qqGroupDataLoader.getGroupData()
+  group.value = groups.value[0].id
 })
 </script>
 

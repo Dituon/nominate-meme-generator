@@ -5,13 +5,13 @@
       :group="{ name: 'member', pull: 'clone', put: false }"
       item-key="name"
     >
-      <template #item="{ element }">
+      <template #item="{ element }: { element: MemberData }">
         <v-list-item
-          :title="element"
+          :title="element.name"
         >
           <template v-slot:prepend>
             <v-avatar
-              :image="parseUrl(element)"
+              :image="element.avatar"
             ></v-avatar>
           </template>
         </v-list-item>
@@ -23,21 +23,19 @@
 
 <script setup lang="ts">
 
+import { MemberData } from "@/types/member";
 import {defineComponent, PropType, toRefs} from "vue";
 import draggable from "vuedraggable";
 defineComponent(draggable)
 
 const props = defineProps({
   items: {
-    type: Array as PropType<string[]>,
+    type: Array as PropType<MemberData[]>,
     required: true,
-  },
-  parseUrl: {
-    type: Function as PropType<(string) => string>,
-    default: s => s,
   },
 })
 const { items } = toRefs(props)
+console.log(items.value)
 
 </script>
 

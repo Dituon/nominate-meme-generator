@@ -3,7 +3,7 @@
     icon="mdi-plus"
     variant="elevated"
     size="large"
-    block="block"
+    :block="true"
     :elevation="dragging ? 16 : 2"
     :color="dragging ? 'orange-darken-4' : ''"
     :disabled="disabled"
