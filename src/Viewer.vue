@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       <v-navigation-drawer
-        permanent
+        mobile-breakpoint="md"
       >
         <v-autocomplete
           label="Template"
@@ -32,6 +32,7 @@
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
+            ref="nominateTemplate"
           ></NominateTemplate>
           <LevelRankTemplate
             v-if="template === 'LevelRank'"
@@ -40,10 +41,14 @@
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
+            ref="levelRankTemplate"
           ></LevelRankTemplate>
         </v-container>
       </v-main>
       <div class="nav-btns">
+        <SaveImageBtn
+          :element="templateRef?.$el"
+        ></SaveImageBtn>
         <DeleteBtn
           :data-map="dataMap"
           :dragging="dragging"
@@ -64,12 +69,18 @@ import { BaseDataLoader } from './loader/base-data-loader';
 import { PropType } from 'vue';
 import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
 import LevelRankTemplate from './meme-template/level-rank/LevelRankTemplate.vue';
+import SaveImageBtn from './components/SaveImageBtn.vue';
 
 const templates = [
   'Nominate', 'LevelRank'
 ] as const
 
 const template = ref<typeof templates[number]>(templates[0])
+
+const nominateTemplate = ref<InstanceType<typeof NominateTemplate>>()
+const levelRankTemplate = ref<InstanceType<typeof LevelRankTemplate>>()
+
+const templateRef = ref<InstanceType<typeof NominateTemplate | typeof LevelRankTemplate>>()
 
 const props = defineProps({
   dataLoader: {
@@ -86,9 +97,13 @@ const members = ref<MemberData[]>([])
 const dataMap = reactive({})
 const dragging = ref(false)
 
+watch(nominateTemplate, n => templateRef.value = n)
+watch(levelRankTemplate, n => templateRef.value = n)
+
 watch(group, async n => {
   members.value = await dataLoader.getMemberData(n)
 })
+
 onMounted(async () => {
   groups.value = await dataLoader.getGroupData()
   group.value = groups.value[0].id

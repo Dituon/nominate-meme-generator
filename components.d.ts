@@ -13,5 +13,6 @@ declare module 'vue' {
     MemberList: typeof import('./src/components/MemberList.vue')['default']
     MemberSelector: typeof import('./src/components/MemberSelector.vue')['default']
     NominateTemplate: typeof import('./src/components/NominateTemplate.vue')['default']
+    SaveImageBtn: typeof import('./src/components/SaveImageBtn.vue')['default']
   }
 }

@@ -1,12 +1,12 @@
 <template>
   <v-btn
-    icon="mdi-plus"
     variant="elevated"
     size="large"
     :block="true"
     :elevation="dragging ? 16 : 2"
     :color="dragging ? 'orange-darken-4' : ''"
     :disabled="disabled"
+    icon
   >
     <v-icon
       :icon="'mdi-' + (disabled ? 'delete-off' : (dragging ? 'delete-empty' : 'delete'))"

@@ -80,12 +80,6 @@
   watch(dragging, n => {
     emits('dragging', n)
   })
-  
-  modelValue.value = items.reduce((obj, v) => {
-    obj[v] = []
-    return obj
-  }, modelValue.value)
-  
   </script>
   
   <style lang="scss" scoped>

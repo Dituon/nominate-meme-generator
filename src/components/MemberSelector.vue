@@ -32,11 +32,12 @@
         :title="item.raw.name"
       >
         <template v-slot:prepend>
-          <v-avatar
-            :image="item.raw.avatar"
-            start
-          >
-          </v-avatar>
+          <v-avatar>
+              <v-img
+                :src="item.raw.avatar"
+              >
+              </v-img>
+            </v-avatar>
         </template>
       </v-list-item>
     </template>

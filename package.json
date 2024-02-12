@@ -1,6 +1,6 @@
 {
   "name": "nominate-meme-generator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@wtto00/html2canvas": "^1.4.3",
+    "file-saver": "^2.0.5",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
     "vuedraggable": "^4.1.0",
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.23.0",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20.10.0",
     "@vitejs/plugin-vue": "^4.5.0",
     "sass": "^1.69.0",

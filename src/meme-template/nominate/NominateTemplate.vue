@@ -109,6 +109,10 @@ watch(dragging, n => {
     display: flex;
   }
 
+  .item>.avatars>.avatar {
+    flex: 1;
+  }
+
   .item>.avatars>.avatar>img {
     width: 100%;
     height: 100%;

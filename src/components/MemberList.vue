@@ -10,9 +10,12 @@
           :title="element.name"
         >
           <template v-slot:prepend>
-            <v-avatar
-              :image="element.avatar"
-            ></v-avatar>
+            <v-avatar>
+              <v-img
+                :src="element.avatar"
+              >
+              </v-img>
+            </v-avatar>
           </template>
         </v-list-item>
       </template>
