@@ -18,7 +18,7 @@
       >
         <draggable
           class="avatars"
-          :list="modelValue[item]"
+          :list="modelValue[item] ?? (modelValue[item] = [])"
           group="member"
           item-key="name"
           @start="dragging = true"
@@ -54,11 +54,7 @@ const props = defineProps({
   items: {
     type: Array as PropType<string[]>,
     required: true,
-  },
-  parseUrl: {
-    type: Function as PropType<(s: string) => string>,
-    default: (s: string) => s,
-  },
+  }
 })
 
 const dragging = ref(false)
@@ -75,6 +71,12 @@ watch(dragging, n => {
   emits('dragging', n)
 })
 
+watch(modelValue, n => {
+  console.log(n)
+})
+
+console.log(modelValue)
+
 modelValue.value = (items?.value ?? []).reduce((obj, v) => {
   obj[v] = []
   return obj
@@ -84,9 +86,6 @@ modelValue.value = (items?.value ?? []).reduce((obj, v) => {
 
 <style scoped>
   .items {
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
-    /*justify-content: space-evenly;*/
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
     gap: 10px;

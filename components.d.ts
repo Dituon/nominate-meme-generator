@@ -10,6 +10,7 @@ declare module 'vue' {
     DeleteBtn: typeof import('./src/components/DeleteBtn.vue')['default']
     GroupSelector: typeof import('./src/components/GroupSelector.vue')['default']
     MemberAvatarList: typeof import('./src/components/MemberAvatarList.vue')['default']
+    MemberList: typeof import('./src/components/MemberList.vue')['default']
     NominateTemplate: typeof import('./src/components/NominateTemplate.vue')['default']
   }
 }

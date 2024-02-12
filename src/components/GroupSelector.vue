@@ -2,7 +2,7 @@
   <div>
     <v-autocomplete
       label="Group"
-      :items="groups"
+      :items="groups as GroupData[]"
       v-model="modelValue"
       item-value="id"
       item-title="name"

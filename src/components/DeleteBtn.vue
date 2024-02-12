@@ -27,14 +27,13 @@
       </v-card>
     </v-dialog>
     <draggable
-      class="list-group"
       :list="removedList"
       ghost-class="d-none"
       group="member"
       style="width: 100%; height: 100%; position: absolute;"
     >
       <template #item="{ element, index }">
-        <div></div>
+        <div class="d-none">{{index}}</div>
       </template>
     </draggable>
   </v-btn>

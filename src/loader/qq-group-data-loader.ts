@@ -9,6 +9,20 @@ export class QQGroupDataLoader extends BaseDataLoader {
   protected groupDataPromise?: Promise<GroupData[]>
   protected memberDataPromiseMap: { [groupId: string]: Promise<MemberData[]> } = {}
 
+  public title: string = '2023 年度最佳群友提名'
+  public items: string[] = [
+    "最富裕的群友",
+    "最二次元的群友",
+    "最可(香)爱(草)的群友",
+    "发涩图最多的群友",
+    "最活跃的群友",
+    "最银乱的群友",
+    "游戏领域大神群友",
+    "傻到可爱的群友",
+    "最佳姐姐/哥哥系",
+    "最佳妹妹/弟弟系",
+  ]
+
   constructor() {
     super()
 
