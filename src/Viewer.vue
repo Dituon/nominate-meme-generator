@@ -28,6 +28,7 @@
           <NominateTemplate
             v-if="template === 'Nominate'"
             :title="dataLoader.title"
+            :members="members"
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
@@ -35,6 +36,7 @@
           <LevelRankTemplate
             v-if="template === 'LevelRank'"
             :title="dataLoader.title"
+            :members="members"
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"

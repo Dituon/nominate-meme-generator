@@ -36,6 +36,11 @@
               </div>
             </template>
           </draggable>
+          <MemberSelector
+            :members="members"
+            v-model:show="showSelectorMap[item]"
+            v-model:items="modelValue[item]"
+          ></MemberSelector>
         </div>
       </div>
     </div>
@@ -45,14 +50,24 @@
   import draggable from 'vuedraggable'
   import {defineComponent, defineModel, PropType, ref, toRefs, watch} from "vue";
   import { MemberData } from '@/types/member';
+  import MemberSelector from '@/components/MemberSelector.vue';
+  import { reactive } from 'vue';
   
   defineComponent(draggable)
   
   const props = defineProps({
     title: String,
+    members: {
+      type: Array as PropType<MemberData[]>,
+      default: []
+    }
   })
   
   const dragging = ref(false)
+  const showSelectorMap = reactive<{
+    [key: string]: boolean
+  }>({})
+
   const {title} = toRefs(props)
   const items = ['SSS', 'S', 'A', 'B', 'C', 'D', 'E']
   
@@ -90,9 +105,9 @@
 
     @for $i from 0 to $steps {
       .item:nth-child(#{$i}) {
-        $mixStartColor: mix($gradientStart, $gradientMiddle, percentage($i / ($steps - 1) * 0.7));
-        $mixEndColor: mix($gradientMiddle, $gradientEnd, percentage($i / ($steps - 1)));
-        background: mix($mixStartColor, $mixEndColor, percentage($i / ($steps - 1)));
+        $mixStartColor: mix($gradientStart, $gradientMiddle, percentage(calc($i / ($steps - 1) * 0.7)));
+        $mixEndColor: mix($gradientMiddle, $gradientEnd, percentage(calc($i / ($steps - 1))));
+        background: mix($mixStartColor, $mixEndColor, percentage(calc($i / ($steps - 1))));
       }
     }
       

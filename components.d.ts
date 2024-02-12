@@ -11,6 +11,7 @@ declare module 'vue' {
     GroupSelector: typeof import('./src/components/GroupSelector.vue')['default']
     MemberAvatarList: typeof import('./src/components/MemberAvatarList.vue')['default']
     MemberList: typeof import('./src/components/MemberList.vue')['default']
+    MemberSelector: typeof import('./src/components/MemberSelector.vue')['default']
     NominateTemplate: typeof import('./src/components/NominateTemplate.vue')['default']
   }
 }

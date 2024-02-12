@@ -37,6 +37,11 @@
           class="title"
           contenteditable="true"
         >{{item}}</span>
+        <MemberSelector
+            :members="members"
+            v-model:show="showSelectorMap[item]"
+            v-model:items="modelValue[item]"
+          ></MemberSelector>
       </div>
     </div>
   </div>
@@ -44,7 +49,7 @@
 
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import {defineComponent, defineModel, PropType, ref, toRefs, watch} from "vue";
+import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
 import { MemberData } from '@/types/member';
 
 defineComponent(draggable)
@@ -54,6 +59,10 @@ const props = defineProps({
   items: {
     type: Array as PropType<string[]>,
     required: true,
+  },
+  members: {
+      type: Array as PropType<MemberData[]>,
+      default: []
   }
 })
 
@@ -63,18 +72,15 @@ const {title, items} = toRefs(props)
 const modelValue = defineModel<{[key: string]: []}>({
   default: {}
 })
+const showSelectorMap = reactive<{
+    [key: string]: boolean
+  }>({})
 
 const emits = defineEmits<{(e: 'dragging', value: boolean): void}>()
 
 watch(dragging, n => {
   emits('dragging', n)
 })
-
-modelValue.value = (items?.value ?? []).reduce((obj, v) => {
-  obj[v] = []
-  return obj
-}, modelValue.value)
-
 </script>
 
 <style scoped>
