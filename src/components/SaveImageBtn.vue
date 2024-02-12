@@ -10,14 +10,14 @@
       icon
     >
       <v-icon
-        icon="mdi-file-image-plus"
+        icon="mdi-download"
       ></v-icon>
       <v-dialog
         activator="parent"
         width="auto"
         v-model="dialog"
       >
-        <v-card width="500">
+        <v-card style="width: min(80vw, 36em);">
           <v-card-title>下载图片</v-card-title>
           <v-card-text>
             <v-img :src="dataUrl"></v-img>

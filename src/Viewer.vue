@@ -1,7 +1,26 @@
 <template>
   <v-app>
     <v-layout>
+      <v-app-bar 
+        color="primary"
+        density="compact"
+        style="position: fixed;"
+      >
+        <v-app-bar-nav-icon
+          variant="text"
+          @click="showDrawer = !showDrawer"
+        ></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Editor</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon="mdi-github" href="https://github.com/Dituon/nominate-meme-generator">
+        </v-btn>
+      </v-app-bar>
       <v-navigation-drawer
+        floating
+        v-model="showDrawer"
         mobile-breakpoint="md"
       >
         <v-autocomplete
@@ -96,6 +115,7 @@ const group = ref<string>('')
 const members = ref<MemberData[]>([])
 const dataMap = reactive({})
 const dragging = ref(false)
+const showDrawer = ref(true)
 
 watch(nominateTemplate, n => templateRef.value = n)
 watch(levelRankTemplate, n => templateRef.value = n)
