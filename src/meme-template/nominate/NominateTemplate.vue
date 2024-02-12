@@ -67,15 +67,8 @@ const modelValue = defineModel<{[key: string]: []}>({
 const emits = defineEmits<{(e: 'dragging', value: boolean): void}>()
 
 watch(dragging, n => {
-  console.log(n)
   emits('dragging', n)
 })
-
-watch(modelValue, n => {
-  console.log(n)
-})
-
-console.log(modelValue)
 
 modelValue.value = (items?.value ?? []).reduce((obj, v) => {
   obj[v] = []

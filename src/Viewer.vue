@@ -4,6 +4,13 @@
       <v-navigation-drawer
         permanent
       >
+        <v-autocomplete
+          label="Template"
+          :items="templates"
+          :hide-details="true"
+          v-model="template"
+        >
+        </v-autocomplete>
         <GroupSelector
           v-model="group"
           :groups="groups"
@@ -19,11 +26,19 @@
       <v-main>
         <v-container>
           <NominateTemplate
+            v-if="template === 'Nominate'"
             :title="dataLoader.title"
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
           ></NominateTemplate>
+          <LevelRankTemplate
+            v-if="template === 'LevelRank'"
+            :title="dataLoader.title"
+            :items="dataLoader.items"
+            @dragging="n => dragging = n"
+            v-model="dataMap"
+          ></LevelRankTemplate>
         </v-container>
       </v-main>
       <div class="nav-btns">
@@ -41,11 +56,18 @@ import {onMounted, reactive, ref, watch} from 'vue';
 import GroupSelector from './components/GroupSelector.vue';
 import MemberList from "@/components/MemberList.vue";
 import DeleteBtn from "@/components/DeleteBtn.vue";
-import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
 import { MemberData } from './types/member';
 import { GroupData } from './types/group';
 import { BaseDataLoader } from './loader/base-data-loader';
 import { PropType } from 'vue';
+import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
+import LevelRankTemplate from './meme-template/level-rank/LevelRankTemplate.vue';
+
+const templates = [
+  'Nominate', 'LevelRank'
+] as const
+
+const template = ref<typeof templates[number]>(templates[0])
 
 const props = defineProps({
   dataLoader: {
@@ -55,9 +77,6 @@ const props = defineProps({
 })
 
 const dataLoader = reactive(props.dataLoader)
-watch(() => dataLoader.title, (newTitle, oldTitle) => {
-  console.log(`Title changed from ${oldTitle} to ${newTitle}`);
-})
 
 const groups = ref<GroupData[]>([])
 const group = ref<string>('')
