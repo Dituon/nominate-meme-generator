@@ -16,7 +16,8 @@
         v-for="item in items"
         class="item"
       >
-        <draggable
+        <div>
+          <draggable
           class="avatars"
           :list="modelValue[item] ?? (modelValue[item] = [])"
           group="member"
@@ -33,15 +34,16 @@
             </div>
           </template>
         </draggable>
-        <span
-          class="title"
-          contenteditable="true"
-        >{{item}}</span>
         <MemberSelector
             :members="members"
             v-model:show="showSelectorMap[item]"
             v-model:items="modelValue[item]"
           ></MemberSelector>
+        </div>
+        <span
+          class="title"
+          contenteditable="true"
+        >{{item}}</span>
       </div>
     </div>
   </div>
@@ -97,23 +99,23 @@ watch(dragging, n => {
     margin: 1em;
   }
 
-  .item>.title {
+  .item .title {
     display: inline-block;
     width: 100%;
     border-top: 3px solid;
   }
 
-  .item>.avatars {
+  .item .avatars {
     aspect-ratio : 1 / 1;
     width: 100%;
     display: flex;
   }
 
-  .item>.avatars>.avatar {
+  .item .avatars>.avatar {
     flex: 1;
   }
 
-  .item>.avatars>.avatar>img {
+  .item .avatars>.avatar>img {
     width: 100%;
     height: 100%;
     object-fit: cover;
