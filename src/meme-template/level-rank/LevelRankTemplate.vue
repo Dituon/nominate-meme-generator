@@ -3,13 +3,14 @@
       <h1 contenteditable="true">{{ title }}</h1>
       <h3 class="text-right">
         <span class="pr-4">填表人:</span>
-        <span
-          style="min-width: 2em"
-          class="d-inline-block text-decoration-underline text-center"
-          contenteditable="true"
-        >
-        我
-        </span>
+        <contenteditable
+        tag="span"
+        style="min-width: 2em"
+        class="d-inline-block text-decoration-underline text-center"
+        :contenteditable="true"
+        v-model="config.user.name"
+      >
+      </contenteditable>
       </h3>
       <div class="items">
         <div
@@ -26,6 +27,7 @@
             item-key="name"
             @start="dragging = true"
             @end="dragging = false"
+            :disabled="!config.app.draggable"
           >
             <template #item="{ element }: { element: MemberData }">
               <div class="avatar">
@@ -43,6 +45,7 @@
           ></MemberSelector>
         </div>
       </div>
+      <Watermark></Watermark>
     </div>
   </template>
   
@@ -52,6 +55,8 @@
   import { MemberData } from '@/types/member';
   import MemberSelector from '@/components/MemberSelector.vue';
   import { reactive } from 'vue';
+  import { config } from '@/utils/reactive-config';
+  import contenteditable from 'vue-contenteditable';
   
   defineComponent(draggable)
   

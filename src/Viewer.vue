@@ -15,8 +15,10 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon="mdi-github" href="https://github.com/Dituon/nominate-meme-generator">
-        </v-btn>
+        <v-btn icon="mdi-cog" @click="settingDialog = true"></v-btn>
+        <v-btn icon="mdi-github" href="https://github.com/Dituon/nominate-meme-generator"></v-btn>
+
+        <Setting v-model="settingDialog"></Setting>
       </v-app-bar>
       <v-navigation-drawer
         floating
@@ -27,11 +29,11 @@
           label="Template"
           :items="templates"
           :hide-details="true"
-          v-model="template"
+          v-model="(config.user.template as any)"
         >
         </v-autocomplete>
         <GroupSelector
-          v-model="group"
+          v-model="config.user.group"
           :groups="groups"
         ></GroupSelector>
 
@@ -45,7 +47,7 @@
       <v-main>
         <v-container>
           <NominateTemplate
-            v-if="template === 'Nominate'"
+            v-if="config.user.template === 'Nominate'"
             :title="dataLoader.title"
             :members="members"
             :items="dataLoader.items"
@@ -54,7 +56,7 @@
             ref="nominateTemplate"
           ></NominateTemplate>
           <LevelRankTemplate
-            v-if="template === 'LevelRank'"
+            v-if="config.user.template === 'LevelRank'"
             :title="dataLoader.title"
             :members="members"
             :items="dataLoader.items"
@@ -89,12 +91,13 @@ import { PropType } from 'vue';
 import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
 import LevelRankTemplate from './meme-template/level-rank/LevelRankTemplate.vue';
 import SaveImageBtn from './components/SaveImageBtn.vue';
+import Setting from './components/Setting.vue';
+import { config, groupDataMap } from './utils/reactive-config';
+import { nextTick } from 'vue';
 
 const templates = [
   'Nominate', 'LevelRank'
 ] as const
-
-const template = ref<typeof templates[number]>(templates[0])
 
 const nominateTemplate = ref<InstanceType<typeof NominateTemplate>>()
 const levelRankTemplate = ref<InstanceType<typeof LevelRankTemplate>>()
@@ -111,22 +114,27 @@ const props = defineProps({
 const dataLoader = reactive(props.dataLoader)
 
 const groups = ref<GroupData[]>([])
-const group = ref<string>('')
 const members = ref<MemberData[]>([])
-const dataMap = reactive({})
+const dataMap = ref(reactive({}))
 const dragging = ref(false)
 const showDrawer = ref(true)
+const settingDialog = ref(false)
 
 watch(nominateTemplate, n => templateRef.value = n)
 watch(levelRankTemplate, n => templateRef.value = n)
 
-watch(group, async n => {
-  members.value = await dataLoader.getMemberData(n)
-})
+async function initGroup(groupId: string) {
+  members.value = await dataLoader.getMemberData(groupId)
+  dataMap.value = groupDataMap.value[groupId] ??= {}
+}
+
+watch(() => config.user.group, initGroup)
 
 onMounted(async () => {
   groups.value = await dataLoader.getGroupData()
-  group.value = groups.value[0].id
+  config.user.group ||= groups.value[0].id
+  config.user.template ||= templates[0]
+  await initGroup(config.user.group)
 })
 </script>
 

@@ -4,6 +4,7 @@
       :list="items"
       :group="{ name: 'member', pull: 'clone', put: false }"
       item-key="name"
+      :disabled="!config.app.draggable"
     >
       <template #item="{ element }: { element: MemberData }">
         <v-list-item
@@ -27,6 +28,7 @@
 <script setup lang="ts">
 
 import { MemberData } from "@/types/member";
+import { config } from "@/utils/reactive-config";
 import {defineComponent, PropType, toRefs} from "vue";
 import draggable from "vuedraggable";
 defineComponent(draggable)

@@ -28,6 +28,7 @@
     </v-dialog>
     <draggable
       :list="removedList"
+      item-key="name"
       ghost-class="d-none"
       group="member"
       style="width: 100%; height: 100%; position: absolute;"

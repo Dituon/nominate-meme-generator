@@ -3,13 +3,14 @@
     <h1 contenteditable="true">{{ title }}</h1>
     <h3 class="text-right">
       <span class="pr-4">填表人:</span>
-      <span
+      <contenteditable
+        tag="span"
         style="min-width: 2em"
         class="d-inline-block text-decoration-underline text-center"
-        contenteditable="true"
+        :contenteditable="true"
+        v-model="config.user.name"
       >
-      我
-      </span>
+      </contenteditable>
     </h3>
     <div class="items">
       <div
@@ -19,11 +20,12 @@
         <div>
           <draggable
           class="avatars"
-          :list="modelValue[item] ?? (modelValue[item] = [])"
+          :list="modelValue[item] ??= []"
           group="member"
           item-key="name"
           @start="dragging = true"
           @end="dragging = false"
+          :disabled="!config.app.draggable"
         >
           <template #item="{ element }: { element: MemberData }">
             <div class="avatar">
@@ -46,6 +48,7 @@
         >{{item}}</span>
       </div>
     </div>
+    <Watermark></Watermark>
   </div>
 </template>
 
@@ -53,6 +56,9 @@
 import draggable from 'vuedraggable'
 import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
 import { MemberData } from '@/types/member';
+import { config } from '@/utils/reactive-config';
+import Watermark from '@/components/Watermark.vue';
+import contenteditable from 'vue-contenteditable';
 
 defineComponent(draggable)
 
@@ -63,8 +69,8 @@ const props = defineProps({
     required: true,
   },
   members: {
-      type: Array as PropType<MemberData[]>,
-      default: []
+    type: Array as PropType<MemberData[]>,
+    default: []
   }
 })
 
@@ -75,8 +81,8 @@ const modelValue = defineModel<{[key: string]: []}>({
   default: {}
 })
 const showSelectorMap = reactive<{
-    [key: string]: boolean
-  }>({})
+  [key: string]: boolean
+}>({})
 
 const emits = defineEmits<{(e: 'dragging', value: boolean): void}>()
 
