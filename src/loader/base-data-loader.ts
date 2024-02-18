@@ -4,6 +4,7 @@ import { MemberData } from "@/types/member"
 export abstract class BaseDataLoader {
   public abstract title: string
   public abstract items: string[]
+  public abstract desc?: string
 
   abstract getGroupData(): Promise<GroupData[]>
 

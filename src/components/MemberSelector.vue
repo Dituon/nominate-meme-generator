@@ -1,13 +1,4 @@
 <template>
-  <v-menu
-    v-model="show"
-    activator="parent"
-    location="center"
-    min-width="200"
-    width="30%"
-    scrim
-    :close-on-content-click="false"
-  >
     <v-autocomplete
       :items="members"
       v-model="items"
@@ -17,7 +8,6 @@
       chips
       multiple
       return-object
-      variant="solo-filled"
     >
       <template v-slot:chip="{ props, item }">
         <v-chip
@@ -40,15 +30,11 @@
         </v-list-item>
       </template>
     </v-autocomplete>
-  </v-menu>
 </template>
 <script setup lang="ts">
 import {MemberData} from '@/types/member';
 import {PropType, toRefs} from 'vue';
 
-const show = defineModel<boolean>('show', {
-  default: false
-})
 const items = defineModel<MemberData[]>('items', {
   default: []
 })

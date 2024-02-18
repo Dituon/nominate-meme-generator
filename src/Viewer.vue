@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar 
+      <v-app-bar
         color="primary"
         density="compact"
-        style="position: fixed;"
+        class="position-fixed"
       >
         <v-app-bar-nav-icon
           variant="text"
@@ -25,20 +25,26 @@
         v-model="showDrawer"
         mobile-breakpoint="md"
       >
-        <v-autocomplete
-          label="Template"
-          :items="templates"
-          :hide-details="true"
-          v-model="(config.user.template as any)"
-        >
-        </v-autocomplete>
-        <GroupSelector
-          v-model="config.user.group"
-          :groups="groups"
-        ></GroupSelector>
+        <v-sheet class="position-sticky" style="top: 0; z-index: 1;">
+          <v-autocomplete
+            label="Template"
+            :items="templates"
+            :hide-details="true"
+            v-model="(config.user.template as any)"
+          >
+          </v-autocomplete>
+          <GroupSelector
+            v-model="config.user.group"
+            :groups="groups"
+          ></GroupSelector>
+        </v-sheet>
+        <p
+          v-if="dataLoader.desc"
+          style="opacity: 0.5; font-size: 0.8em"
+          class="text-pre-line text-center my-2"
+        >{{ dataLoader.desc }}</p>
 
         <v-divider></v-divider>
-
         <MemberList
           :items="members"
         ></MemberList>
@@ -84,16 +90,14 @@ import {onMounted, reactive, ref, watch} from 'vue';
 import GroupSelector from './components/GroupSelector.vue';
 import MemberList from "@/components/MemberList.vue";
 import DeleteBtn from "@/components/DeleteBtn.vue";
-import { MemberData } from './types/member';
-import { GroupData } from './types/group';
-import { BaseDataLoader } from './loader/base-data-loader';
-import { PropType } from 'vue';
+import {MemberData} from './types/member';
+import {GroupData} from './types/group';
+import {BaseDataLoader} from './loader/base-data-loader';
 import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
 import LevelRankTemplate from './meme-template/level-rank/LevelRankTemplate.vue';
 import SaveImageBtn from './components/SaveImageBtn.vue';
 import Setting from './components/Setting.vue';
-import { config, groupDataMap } from './utils/reactive-config';
-import { nextTick } from 'vue';
+import {config, groupDataMap} from './utils/reactive-config';
 
 const templates = [
   'Nominate', 'LevelRank'
@@ -104,12 +108,9 @@ const levelRankTemplate = ref<InstanceType<typeof LevelRankTemplate>>()
 
 const templateRef = ref<InstanceType<typeof NominateTemplate | typeof LevelRankTemplate>>()
 
-const props = defineProps({
-  dataLoader: {
-    required: true,
-    type: Object as PropType<BaseDataLoader>,
-  }
-})
+const props = defineProps<{
+  dataLoader: BaseDataLoader
+}>()
 
 const dataLoader = reactive(props.dataLoader)
 

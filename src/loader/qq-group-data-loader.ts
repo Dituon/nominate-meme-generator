@@ -22,6 +22,7 @@ export class QQGroupDataLoader extends BaseDataLoader {
     "最佳姐姐/哥哥系",
     "最佳妹妹/弟弟系",
   ]
+  public desc = undefined
 
   constructor() {
     super()

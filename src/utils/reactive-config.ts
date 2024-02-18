@@ -4,14 +4,10 @@ import { createProxyItem } from './cache'
 
 const dataProxy = createProxyItem('data', {})
 export const config = configCache
-watch(() => config.user.group, () => {
-    console.log(12)
-})
 export const groupDataMap: Ref<{[key: string]: {}}> = ref({})
 initGroupDataMap()
 
 watch(() => config.app.saveData, initGroupDataMap)
-
 
 export function initGroupDataMap(cacheFlag: boolean = config.app.saveData) {
     const prev = Object.assign({}, groupDataMap.value)

@@ -11,6 +11,7 @@ export interface RepoDataLoaderOptions {
 export class RepoDataLoader extends BaseDataLoader {
   public title: string = ''
   public items: string[] = []
+  public desc = undefined
 
   readonly options: Required<RepoDataLoaderOptions>
   constructor(options: RepoDataLoaderOptions) {
@@ -25,8 +26,9 @@ export class RepoDataLoader extends BaseDataLoader {
   }
 
   async getMemberData(id: string): Promise<MemberData[]> {
-    const {title, items, data} = await fetch(this.options.parseMemberUrl(this.options.baseUrl, id)).then(p => p.json())
+    const {title, desc, items, data} = await fetch(this.options.parseMemberUrl(this.options.baseUrl, id)).then(p => p.json())
     this.title = title
+    this.desc = desc
     this.items = items
     return data
   }
