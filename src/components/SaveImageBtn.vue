@@ -86,12 +86,9 @@ const dataUrl = ref<string>('')
 const canvas = ref<HTMLCanvasElement>()
 const screenShotArea = ref<HTMLDivElement>()
 
-const props = defineProps({
-  element: {
-    type: Object as PropType<HTMLElement>,
-    required: true,
-  },
-})
+const props = defineProps<{
+  element: HTMLElement
+}>()
 const {element} = toRefs(props)
 
 async function buildCanvas() {
@@ -100,8 +97,11 @@ async function buildCanvas() {
     useCORS: true,
     windowWidth: 1600,
     logging: false,
+    onclone(_, e){
+      e.style.color = '#000'
+    }
   })
-  dataUrl.value = canvas.value.toDataURL("image/png")
+  dataUrl.value = canvas.value!.toDataURL("image/png")
   loading.value = false
 }
 

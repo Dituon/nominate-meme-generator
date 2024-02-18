@@ -27,7 +27,7 @@
             @end="dragging = false"
             :disabled="!config.app.draggable"
           >
-            <template #item="{ element }: { element: MemberData }">
+            <template #item="{ element }: { element: MemberDataItem }">
               <div class="avatar">
                 <img
                   :src="element.avatar"
@@ -37,9 +37,10 @@
             </template>
           </draggable>
           <MemberSelectMenu
-            :members="members"
+            :members="members!"
             v-model:show="showSelectorMap[item]"
             v-model:items="modelValue[item]"
+            :loading="loading"
           ></MemberSelectMenu>
         </div>
         <span
@@ -54,11 +55,13 @@
 
 <script setup lang="ts">
 import draggable from 'vuedraggable'
+import contenteditable from 'vue-contenteditable'
 import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
-import {MemberData} from '@/types/member';
+import {MemberDataItem} from '@/types/member';
 import {config} from '@/utils/reactive-config';
 import Watermark from '@/components/Watermark.vue';
 import MemberSelectMenu from '@/components/MemberSelectMenu.vue';
+import MemberSelector from "@/components/MemberSelector.vue";
 
 defineComponent(draggable)
 
@@ -69,8 +72,12 @@ const props = defineProps({
     required: true,
   },
   members: {
-    type: Array as PropType<MemberData[]>,
+    type: Array as PropType<MemberDataItem[]>,
     default: []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 

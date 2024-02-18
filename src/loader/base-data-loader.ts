@@ -1,5 +1,5 @@
 import { GroupData } from "@/types/group"
-import { MemberData } from "@/types/member"
+import { MemberDataItem } from "@/types/member"
 
 export abstract class BaseDataLoader {
   public abstract title: string
@@ -8,5 +8,5 @@ export abstract class BaseDataLoader {
 
   abstract getGroupData(): Promise<GroupData[]>
 
-  abstract getMemberData(id: string): Promise<MemberData[]>
+  abstract getMemberData(id: string): Promise<MemberDataItem[]>
 }

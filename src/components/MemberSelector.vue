@@ -1,6 +1,6 @@
 <template>
     <v-autocomplete
-      :items="members"
+      :items="members!"
       v-model="items"
       item-title="name"
       hide-details
@@ -32,17 +32,17 @@
     </v-autocomplete>
 </template>
 <script setup lang="ts">
-import {MemberData} from '@/types/member';
+import {MemberDataItem} from '@/types/member';
 import {PropType, toRefs} from 'vue';
 
-const items = defineModel<MemberData[]>('items', {
+const items = defineModel<MemberDataItem[]>('items', {
   default: []
 })
 
 const props = defineProps({
   members: {
-    type: Array as PropType<MemberData[]>,
-    reqired: true
+    type: Array as PropType<MemberDataItem[]>,
+    required: true
   }
 })
 const {members} = toRefs(props)

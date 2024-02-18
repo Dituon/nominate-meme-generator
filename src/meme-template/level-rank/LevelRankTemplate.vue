@@ -20,29 +20,31 @@
         <div class="title">
           <span contenteditable="true">{{ item }}</span>
         </div>
-        <draggable
-          class="avatars"
-          :list="modelValue[item] ?? (modelValue[item] = [])"
-          group="member"
-          item-key="name"
-          @start="dragging = true"
-          @end="dragging = false"
-          :disabled="!config.app.draggable"
-        >
-          <template #item="{ element }: { element: MemberData }">
-            <div class="avatar">
-              <img
-                :src="element.avatar"
-                :alt="element.name"
-              >
-            </div>
-          </template>
-        </draggable>
-        <MemberSelectMenu
-          :members="members"
-          v-model:show="showSelectorMap[item]"
-          v-model:items="modelValue[item]"
-        ></MemberSelectMenu>
+        <div class="avatars">
+          <draggable
+            :list="modelValue[item] ?? (modelValue[item] = [])"
+            group="member"
+            item-key="name"
+            @start="dragging = true"
+            @end="dragging = false"
+            :disabled="!config.app.draggable"
+          >
+            <template #item="{ element }: { element: MemberDataItem }">
+              <div class="avatar">
+                <img
+                  :src="element.avatar"
+                  :alt="element.name"
+                >
+              </div>
+            </template>
+          </draggable>
+          <MemberSelectMenu
+            :members="members!"
+            :loading="loading"
+            v-model:show="showSelectorMap[item]"
+            v-model:items="modelValue[item]"
+          ></MemberSelectMenu>
+        </div>
       </div>
     </div>
     <Watermark></Watermark>
@@ -51,8 +53,9 @@
 
 <script setup lang="ts">
 import draggable from 'vuedraggable'
+import contenteditable from 'vue-contenteditable'
 import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
-import {MemberData} from '@/types/member';
+import {MemberDataItem} from '@/types/member';
 import {config} from '@/utils/reactive-config';
 import MemberSelectMenu from '@/components/MemberSelectMenu.vue';
 
@@ -61,8 +64,12 @@ defineComponent(draggable)
 const props = defineProps({
   title: String,
   members: {
-    type: Array as PropType<MemberData[]>,
+    type: Array as PropType<MemberDataItem[]>,
     default: []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -115,14 +122,14 @@ $steps: 8;
   display: flex;
 }
 
-.item > .title {
+.item .title {
   flex: 0 0 max(10%, 3em);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.item > .title > span {
+.item .title > span {
   width: 100%;
   font-size: 2em;
   font-style: italic;
@@ -130,13 +137,18 @@ $steps: 8;
   font-family: 'Times New Roman', Times, serif;
 }
 
-.item > .avatars {
+.item .avatars {
+  border-left: 3px solid;
   flex: 1 1;
   display: flex;
-  border-left: 3px solid;
 }
 
-.item > .avatars > .avatar > img {
+.item .avatars>div {
+  flex: 1 1;
+  display: flex;
+}
+
+.item .avatars .avatar > img {
   height: 100%;
   width: 100%;
   padding: 0.2em;

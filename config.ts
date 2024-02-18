@@ -1,4 +1,4 @@
-import {createProxyItem} from './src/utils/cache'
+import {createProxyItem} from '@/utils/cache'
 
 export const config = {
   repoLoader: {
@@ -9,6 +9,7 @@ export const config = {
     name: '我',
     group: '',
     template: '',
+    theme: 'light'
   },
   app: {
     draggable: true,

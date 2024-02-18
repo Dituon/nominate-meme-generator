@@ -1,13 +1,13 @@
 import { BaseDataLoader } from "@/loader/base-data-loader";
 import { GroupData } from "@/types/group";
-import { MemberData } from "@/types/member";
+import { MemberDataItem } from "@/types/member";
 import { QQGroupDataDTO } from "@/types/qq-group-dto/group";
 import { QQMemberDataDTO } from "@/types/qq-group-dto/member";
 import { sendAsyncMessage } from "@/utils/async-window-message";
 
 export class QQGroupDataLoader extends BaseDataLoader {
   protected groupDataPromise?: Promise<GroupData[]>
-  protected memberDataPromiseMap: { [groupId: string]: Promise<MemberData[]> } = {}
+  protected memberDataPromiseMap: { [groupId: string]: Promise<MemberDataItem[]> } = {}
 
   public title: string = '2023 年度最佳群友提名'
   public items: string[] = [
@@ -50,13 +50,13 @@ export class QQGroupDataLoader extends BaseDataLoader {
     return this.groupDataPromise
   }
 
-  async getMemberData(groupId: string): Promise<MemberData[]> {
+  async getMemberData(groupId: string): Promise<MemberDataItem[]> {
     if (!this.memberDataPromiseMap[groupId]) {
-      const data = await sendAsyncMessage({ 
-        type: 'members', 
+      const data = await sendAsyncMessage({
+        type: 'members',
         groupId
       })
-      const d: MemberData[] = (data as QQMemberDataDTO).members.map(m => ({
+      const d: MemberDataItem[] = (data as QQMemberDataDTO).members.map(m => ({
         id: m,
         name: m,
         avatar: QQGroupDataLoader.parseMemberAvatar(m),

@@ -15,6 +15,7 @@
 
         <v-spacer></v-spacer>
 
+        <v-btn icon="mdi-brightness-4" @click="themeName = themeName === 'light' ? 'dark' : 'light'"></v-btn>
         <v-btn icon="mdi-cog" @click="settingDialog = true"></v-btn>
         <v-btn icon="mdi-github" href="https://github.com/Dituon/nominate-meme-generator"></v-btn>
 
@@ -36,17 +37,19 @@
           <GroupSelector
             v-model="config.user.group"
             :groups="groups"
+            :loading="groupLoading"
           ></GroupSelector>
         </v-sheet>
         <p
           v-if="dataLoader.desc"
           style="opacity: 0.5; font-size: 0.8em"
           class="text-pre-line text-center my-2"
-        >{{ dataLoader.desc }}</p>
+        >{{ memberLoading ? '少女加载中...' : dataLoader.desc }}</p>
 
         <v-divider></v-divider>
         <MemberList
           :items="members"
+          :loading="memberLoading"
         ></MemberList>
       </v-navigation-drawer>
 
@@ -60,6 +63,7 @@
             @dragging="n => dragging = n"
             v-model="dataMap"
             ref="nominateTemplate"
+            :loading="memberLoading"
           ></NominateTemplate>
           <LevelRankTemplate
             v-if="config.user.template === 'LevelRank'"
@@ -69,6 +73,7 @@
             @dragging="n => dragging = n"
             v-model="dataMap"
             ref="levelRankTemplate"
+            :loading="memberLoading"
           ></LevelRankTemplate>
         </v-container>
       </v-main>
@@ -90,7 +95,7 @@ import {onMounted, reactive, ref, watch} from 'vue';
 import GroupSelector from './components/GroupSelector.vue';
 import MemberList from "@/components/MemberList.vue";
 import DeleteBtn from "@/components/DeleteBtn.vue";
-import {MemberData} from './types/member';
+import {MemberDataItem} from './types/member';
 import {GroupData} from './types/group';
 import {BaseDataLoader} from './loader/base-data-loader';
 import NominateTemplate from "@/meme-template/nominate/NominateTemplate.vue";
@@ -98,10 +103,19 @@ import LevelRankTemplate from './meme-template/level-rank/LevelRankTemplate.vue'
 import SaveImageBtn from './components/SaveImageBtn.vue';
 import Setting from './components/Setting.vue';
 import {config, groupDataMap} from './utils/reactive-config';
+import {useTheme} from "vuetify";
+import {bindHash} from "@/utils/url-hash";
+
+const themeName = useTheme().global.name
+themeName.value = config.user.theme
+watch(themeName, n => config.user.theme = n)
 
 const templates = [
   'Nominate', 'LevelRank'
 ] as const
+
+config.user.template = bindHash('template', () => config.user.template)
+config.user.group = bindHash('group', () => config.user.group)
 
 const nominateTemplate = ref<InstanceType<typeof NominateTemplate>>()
 const levelRankTemplate = ref<InstanceType<typeof LevelRankTemplate>>()
@@ -115,18 +129,23 @@ const props = defineProps<{
 const dataLoader = reactive(props.dataLoader)
 
 const groups = ref<GroupData[]>([])
-const members = ref<MemberData[]>([])
+const members = ref<MemberDataItem[]>([])
 const dataMap = ref(reactive({}))
 const dragging = ref(false)
 const showDrawer = ref(true)
 const settingDialog = ref(false)
 
+const groupLoading = ref(true)
+const memberLoading = ref(false)
+
 watch(nominateTemplate, n => templateRef.value = n)
 watch(levelRankTemplate, n => templateRef.value = n)
 
 async function initGroup(groupId: string) {
+  memberLoading.value = true
   members.value = await dataLoader.getMemberData(groupId)
   dataMap.value = groupDataMap.value[groupId] ??= {}
+  memberLoading.value = false
 }
 
 watch(() => config.user.group, initGroup)
@@ -135,6 +154,7 @@ onMounted(async () => {
   groups.value = await dataLoader.getGroupData()
   config.user.group ||= groups.value[0].id
   config.user.template ||= templates[0]
+  groupLoading.value = false
   await initGroup(config.user.group)
 })
 </script>
