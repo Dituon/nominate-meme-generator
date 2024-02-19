@@ -12,13 +12,69 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="./favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Vuetify 3</title>
-  <script type="module" crossorigin src="./assets/index-KYYNbxun.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-wgcx-aVt.css">
+    <title>Nominate Meme Generator</title>
+    <style>
+        :root {
+            --loading-bg-color: #fff;
+            --loading-color: #000;
+            background-color: var(--loading-bg-color);
+        }
+        body {
+            margin: 0;
+        }
+        .loader-bg {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-bg>.loader {
+            width: min(20vw, 20vh);
+            aspect-ratio: 1.154;
+            display: grid;
+            color: var(--loading-color);
+            background:
+                    linear-gradient(to bottom left ,#0000 calc(50% - 1px),currentColor 0 calc(50% + 1px),#0000 0) right/50% 100%,
+                    linear-gradient(to bottom right,#0000 calc(50% - 1px),currentColor 0 calc(50% + 1px),#0000 0) left /50% 100%,
+                    linear-gradient(currentColor 0 0) bottom/100% 2px;
+            background-repeat: no-repeat;
+            transform-origin: 50% 66%;
+            animation: l5 4s infinite linear;
+        }
+        .loader-bg>.loader::before,
+        .loader-bg>.loader::after {
+            content: "";
+            grid-area: 1/1;
+            background: inherit;
+            transform-origin: inherit;
+            animation: inherit;
+        }
+        .loader-bg>.loader::after {
+            animation-duration: 2s;
+        }
+        @keyframes l5{
+            100% {transform:rotate(1turn)}
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --loading-bg-color: #000;
+                --loading-color: #ffff;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="./assets/index-tHhrAz0A.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-6sAFujr_.css">
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <div class="loader-bg">
+            <div class="loader"></div>
+        </div>
+    </div>
 </body>
 
 </html>
