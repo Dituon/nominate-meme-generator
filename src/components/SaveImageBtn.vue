@@ -172,6 +172,6 @@ watch(screenShotArea as Ref<HTMLDivElement>, buildIframe)
 
 <style>
 .screenshotArea *[data-html2canvas-ignore] {
-  display: none;
+  display: none !important;
 }
 </style>

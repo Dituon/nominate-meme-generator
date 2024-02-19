@@ -195,7 +195,7 @@ table {
 }
 
 th, tr, td {
-  border: black 1px solid;
+  border: 1px solid;
   text-align: center;
 }
 
@@ -211,7 +211,7 @@ td {
 .item .avatars {
   aspect-ratio: 1 / 1;
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
 }
 
 .item .avatars > .avatar {
@@ -243,6 +243,6 @@ table:not(.show-header) td > .item {
 }
 
 table:not(.show-header) .avatars {
-  border: 3px solid black;
+  border: 3px solid;
 }
 </style>
