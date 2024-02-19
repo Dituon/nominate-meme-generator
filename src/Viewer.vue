@@ -62,7 +62,7 @@
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
-            ref="nominateTemplate"
+            ref="templateRef"
             :loading="memberLoading"
           ></NominateTemplate>
           <LevelRankTemplate
@@ -72,9 +72,19 @@
             :items="dataLoader.items"
             @dragging="n => dragging = n"
             v-model="dataMap"
-            ref="levelRankTemplate"
+            ref="templateRef"
             :loading="memberLoading"
           ></LevelRankTemplate>
+          <CampGridTemplate
+            v-if="config.user.template === 'CampGrid'"
+            :title="dataLoader.title"
+            :members="members"
+            :items="dataLoader.items"
+            @dragging="n => dragging = n"
+            v-model="dataMap"
+            ref="templateRef"
+            :loading="memberLoading"
+          ></CampGridTemplate>
         </v-container>
       </v-main>
       <div class="nav-btns">
@@ -105,22 +115,23 @@ import Setting from './components/Setting.vue';
 import {config, groupDataMap} from './utils/reactive-config';
 import {useTheme} from "vuetify";
 import {bindHash} from "@/utils/url-hash";
+import ScoreTemplate from "@/meme-template/score/ScoreTemplate.vue";
+import CampGridTemplate from "@/meme-template/camp-grid/CampGridTemplate.vue";
 
 const themeName = useTheme().global.name
 themeName.value = config.user.theme
 watch(themeName, n => config.user.theme = n)
 
 const templates = [
-  'Nominate', 'LevelRank'
+  'Nominate', 'LevelRank', 'CampGrid'
 ] as const
 
 config.user.template = bindHash('template', () => config.user.template)
 config.user.group = bindHash('group', () => config.user.group)
 
-const nominateTemplate = ref<InstanceType<typeof NominateTemplate>>()
-const levelRankTemplate = ref<InstanceType<typeof LevelRankTemplate>>()
-
-const templateRef = ref<InstanceType<typeof NominateTemplate | typeof LevelRankTemplate>>()
+const templateRef = ref<InstanceType<
+  typeof NominateTemplate | typeof LevelRankTemplate | typeof CampGridTemplate
+>>()
 
 const props = defineProps<{
   dataLoader: BaseDataLoader
@@ -137,9 +148,6 @@ const settingDialog = ref(false)
 
 const groupLoading = ref(true)
 const memberLoading = ref(false)
-
-watch(nominateTemplate, n => templateRef.value = n)
-watch(levelRankTemplate, n => templateRef.value = n)
 
 async function initGroup(groupId: string) {
   memberLoading.value = true

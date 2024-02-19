@@ -9,11 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     DeleteBtn: typeof import('./src/components/DeleteBtn.vue')['default']
     GroupSelector: typeof import('./src/components/GroupSelector.vue')['default']
-    MemberAvatarList: typeof import('./src/components/MemberAvatarList.vue')['default']
     MemberList: typeof import('./src/components/MemberList.vue')['default']
     MemberSelectMenu: typeof import('./src/components/MemberSelectMenu.vue')['default']
     MemberSelector: typeof import('./src/components/MemberSelector.vue')['default']
-    NominateTemplate: typeof import('./src/components/NominateTemplate.vue')['default']
     SaveImageBtn: typeof import('./src/components/SaveImageBtn.vue')['default']
     Setting: typeof import('./src/components/Setting.vue')['default']
     Watermark: typeof import('./src/components/Watermark.vue')['default']

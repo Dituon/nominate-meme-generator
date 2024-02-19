@@ -54,16 +54,12 @@
 </template>
 
 <script setup lang="ts">
-import draggable from 'vuedraggable'
-import contenteditable from 'vue-contenteditable'
-import {defineComponent, defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
+import {defineModel, PropType, reactive, ref, toRefs, watch} from "vue";
 import {MemberDataItem} from '@/types/member';
 import {config} from '@/utils/reactive-config';
 import Watermark from '@/components/Watermark.vue';
 import MemberSelectMenu from '@/components/MemberSelectMenu.vue';
-import MemberSelector from "@/components/MemberSelector.vue";
 
-defineComponent(draggable)
 
 const props = defineProps({
   title: String,

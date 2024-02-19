@@ -169,3 +169,9 @@ watch(screenShotArea as Ref<HTMLDivElement>, buildIframe)
   transform: rotate(90deg) scale(var(--vw-scale));
 }
 </style>
+
+<style>
+.screenshotArea *[data-html2canvas-ignore] {
+  display: none;
+}
+</style>
