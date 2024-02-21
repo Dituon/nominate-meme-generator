@@ -20,6 +20,7 @@
           <template v-slot:prepend>
             <v-avatar>
               <v-img
+                referrerpolicy="no-referrer"
                 :src="element.avatar"
               >
               </v-img>

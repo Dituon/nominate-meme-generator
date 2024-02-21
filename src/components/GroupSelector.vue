@@ -14,9 +14,13 @@
         :subtitle="item.raw.id"
       >
         <template v-slot:prepend>
-          <v-avatar
-            :image="item.raw.avatar"
-          ></v-avatar>
+          <v-avatar>
+            <v-img
+              referrerpolicy="no-referrer"
+              :src="item.raw.avatar"
+            >
+            </v-img>
+          </v-avatar>
         </template>
       </v-list-item>
     </template>
